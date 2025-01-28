@@ -1,0 +1,27 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main # Despliega solo cambios en la rama principal
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Pull changes and restart server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: 52.90.5.215
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd $HOME/alert360-backend
+            git pull
+            npm i
+            pm2 restart alert360 || pm2 start alert360
+          debug: true
