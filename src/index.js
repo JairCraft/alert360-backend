@@ -4,7 +4,7 @@ import { PORT } from "./config.js";
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Y si lo tiene prendalo, el radio");
 });
 
 app.listen(PORT, () => {
