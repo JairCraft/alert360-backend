@@ -3,6 +3,7 @@ import e from "express";
 import {
   registerUser,
   confirmUserEmail,
+  loginUser,
 } from "../controllers/auth.controller.js";
 
 const router = Router();
@@ -23,6 +24,18 @@ router.post("/auth/confirmEmail", (req, res) => {
   try {
     const { email, verificationCode } = req.body;
     confirmUserEmail(email, verificationCode)
+      .then((data) => res.status(200).send(data))
+      .catch((err) => res.status(400).send(err));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
+router.post("/auth/login", (req, res) => {
+  try {
+    const { email, password } = req.body;
+    loginUser(email, password)
       .then((data) => res.status(200).send(data))
       .catch((err) => res.status(400).send(err));
   } catch (err) {

@@ -1,6 +1,9 @@
-import { CognitoUserPool } from "amazon-cognito-identity-js";
+import {
+  CognitoUserPool,
+  CognitoUser,
+  AuthenticationDetails,
+} from "amazon-cognito-identity-js";
 import dotenv from "dotenv";
-import { CognitoUser } from "amazon-cognito-identity-js";
 
 dotenv.config();
 
