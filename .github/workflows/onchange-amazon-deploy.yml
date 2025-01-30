@@ -23,5 +23,5 @@ jobs:
             cd $HOME/alert360-backend
             git pull
             npm i
-            pm2 restart src/index.js || pm2 start src/index.js
+            pm2 restart src/index.js --update-env || pm2 start src/index.js --update-env
           debug: true

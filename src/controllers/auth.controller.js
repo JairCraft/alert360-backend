@@ -1,5 +1,6 @@
 import { CognitoUserPool } from "amazon-cognito-identity-js";
 import dotenv from "dotenv";
+import { CognitoUser } from "amazon-cognito-identity-js";
 
 dotenv.config();
 
@@ -52,4 +53,20 @@ export function logoutUser() {
   if (user) {
     user.signOut();
   }
+}
+
+export function confirmUserEmail(email, verificationCode) {
+  return new Promise((resolve, reject) => {
+    const user = new CognitoUser({ Username: email, Pool });
+
+    user.confirmRegistration(verificationCode, true, (err, data) => {
+      if (err) {
+        console.error("Error confirming email:", err);
+        reject(err);
+      } else {
+        console.log("Email confirmed:", data);
+        resolve(data);
+      }
+    });
+  });
 }
