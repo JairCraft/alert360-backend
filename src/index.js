@@ -1,10 +1,12 @@
 import express from "express";
 import { PORT } from "./config.js";
 import userRoutes from "./routes/users.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
 app.use(userRoutes);
+app.use(authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Y si lo tiene prendalo, el radio");
