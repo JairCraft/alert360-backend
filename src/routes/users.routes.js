@@ -1,19 +1,38 @@
 import { Router } from "express";
+import { pool } from "../db.js";
 
 const router = Router();
 
-router.get("/users", (req, res) => {
-  res.send("main users");
+router.get("/users", async (req, res) => {
+  const { rows } = await pool.query("SELECT * FROM users");
+  res.json(rows);
 });
-router.get("/users/:userId", (req, res) => {
+
+router.get("/users/:userId", async (req, res) => {
   const { userId } = req.params;
-  res.send("get users by id");
+  const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
+    userId,
+  ]);
+  if (rows.length === 0)
+    return res.status(404).json({ message: "User not found" });
+
+  res.json(rows[0]);
 });
-router.post("/users/save", (req, res) => {
-  const jsonReques = JSON.parse(req.body);
-  res.send("guardando usuario");
+
+router.post("/users", async (req, res) => {
+  const data = req.body;
+  try {
+    await pool.query(
+      "INSERT INTO users (name, email,phone, password) VALUES ($1, $2, $3, $4)",
+      [data.name, data.email, data.phone, data.password]
+    );
+  } catch (e) {
+    return res.status(400).json({ message: e.detail });
+  }
+  res.sendStatus(201);
 });
-router.get("/users", (req, res) => {
+
+router.put("/users", (req, res) => {
   res.send("main users");
 });
 
