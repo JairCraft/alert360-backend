@@ -18,11 +18,6 @@ export const getUser = async (req, res) => {
 
 export const saveUser = async (req, res) => {
   const data = req.body;
-  console.log("Data received:", data);
-  console.log("Type of name:", typeof data.name);
-  console.log("Type of email:", typeof data.email);
-  console.log("Type of phone:", typeof data.phone);
-  console.log("Type of password:", typeof data.password);
   try {
     if (!data.hasOwnProperty("id")) {
       await pool.query(
@@ -31,7 +26,7 @@ export const saveUser = async (req, res) => {
       );
     } else {
       await pool.query(
-        "UPDATE users SET name = $2, email = $3, phone = $4, password = $5) WHERE id = $1 ",
+        "UPDATE users SET name = $2, email = $3, phone = $4, password = $5 WHERE id = $1 ",
         [data.id, data.name, data.email, data.phone, data.password]
       );
     }
