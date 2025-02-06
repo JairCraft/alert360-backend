@@ -12,9 +12,13 @@ export const saveContact = async (req, res) => {
   const data = req.body;
   try {
     if (!data.hasOwnProperty("id")) {
+      const contact_user_id = await pool.query(
+        "SELECT id FROM users WHERE email=$1",
+        [data.contact_email]
+      );
       await pool.query(
         "INSERT INTO emergency_contact (user_id, contact_user_id, relation) VALUES ($1, $2, $3)",
-        [data.user_id, data.contact_user_id, data.relation]
+        [data.user_id, contact_user_id.rows[0].id, data.relation]
       );
     } else {
       await pool.query(
