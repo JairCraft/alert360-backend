@@ -4,6 +4,7 @@ import {
   AuthenticationDetails,
 } from "amazon-cognito-identity-js";
 import dotenv from "dotenv";
+import { pool } from "../db.js";
 
 dotenv.config();
 
@@ -17,13 +18,16 @@ const Pool = new CognitoUserPool(poolData);
 export function registerUser(name, email, password, phone) {
   return new Promise((resolve, reject) => {
     const userAttributes = [{ Name: "custom:phone", Value: phone }];
-    Pool.signUp(email, password, userAttributes, null, (err, data) => {
+    Pool.signUp(email, password, userAttributes, null, async (err, data) => {
       if (err) {
         console.error(err);
         reject(err);
       } else {
         console.log(data);
-
+        await pool.query(
+          "INSERT INTO users (name, email,phone, password) VALUES ($1, $2, $3, $4)",
+          [name, email, phone, password]
+        );
         resolve(data);
       }
     });
@@ -51,11 +55,13 @@ export function loginUser(email, password) {
   });
 }
 
-export function logoutUser() {
+export function logoutUser(res) {
   const user = Pool.getCurrentUser();
   if (user) {
     user.signOut();
+    return res.status(200).send({ message: "User signed out successfully" });
   }
+  return res.status(201).send({ message: "No user to sign out" });
 }
 
 export function confirmUserEmail(email, verificationCode) {

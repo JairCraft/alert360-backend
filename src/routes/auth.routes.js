@@ -4,6 +4,7 @@ import {
   registerUser,
   confirmUserEmail,
   loginUser,
+  logoutUser,
 } from "../controllers/auth.controller.js";
 
 const router = Router();
@@ -38,6 +39,15 @@ router.post("/auth/login", (req, res) => {
     loginUser(email, password)
       .then((data) => res.status(200).send(data))
       .catch((err) => res.status(400).send(err));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
+router.post("/auth/logout", (req, res) => {
+  try {
+    logoutUser(res);
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
