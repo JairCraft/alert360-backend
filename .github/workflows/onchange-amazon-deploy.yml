@@ -16,12 +16,12 @@ jobs:
       - name: Pull changes and restart server
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: 52.90.5.215
+          host: 98.81.252.96
           username: ec2-user
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd $HOME/alert360-backend
             git pull
             npm i
-            pm2 restart alert360 || pm2 start alert360
+            pm2 restart src/index.js --update-env || pm2 start src/index.js --update-env
           debug: true
