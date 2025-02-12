@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.routes.js";
 import contactRoutes from "./routes/contacts.routes.js";
 import alertRoutes from "./routes/alerts.routes.js";
 import deviceRoutes from "./routes/devices.routes.js";
+import { verifyToken } from "./middleware/authMiddleware.js";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -17,11 +18,12 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use(cors());
+app.use(authRoutes);
+app.use(verifyToken);
 app.use(deviceRoutes);
 app.use(alertRoutes);
 app.use(contactRoutes);
 app.use(userRoutes);
-app.use(authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Y si lo tiene prendalo, el radio");
