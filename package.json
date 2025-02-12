@@ -14,8 +14,11 @@
   "description": "",
   "dependencies": {
     "amazon-cognito-identity-js": "^6.3.12",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
     "morgan": "^1.10.0",
     "pg": "^8.13.1",
     "pm2": "^5.4.3"

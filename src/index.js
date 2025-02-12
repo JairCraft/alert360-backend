@@ -7,6 +7,7 @@ import alertRoutes from "./routes/alerts.routes.js";
 import deviceRoutes from "./routes/devices.routes.js";
 import morgan from "morgan";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 
+app.use(cors());
 app.use(deviceRoutes);
 app.use(alertRoutes);
 app.use(contactRoutes);
