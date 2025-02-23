@@ -10,11 +10,18 @@ export const getDevices = async (req, res) => {
 
 export const saveDevice = async (req, res) => {
   const data = req.body;
+
   try {
-    const result = await pool.query(
-      "INSERT INTO user_devices (user_id, endpoint_arn, device_id, platform) VALUES ($1, $2, $3, $4)",
-      [data.user_id, data.endpoint_arn, data.device_id, data.platform]
+    const { rows } = await pool.query(
+      "SELECT * FROM user_devices WHERE device_id = $1",
+      [data.device_id]
     );
+    if (rows.length <= 0) {
+      await pool.query(
+        "INSERT INTO user_devices (user_id, endpoint_arn, device_id, platform) VALUES ($1, $2, $3, $4)",
+        [data.user_id, null, data.device_id, null]
+      );
+    }
   } catch (e) {
     return res.status(400).json({ mesasge: e.message });
   }
