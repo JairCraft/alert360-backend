@@ -49,7 +49,7 @@ export const sendNotifications = async (req, res) => {
         title: title,
         body: body,
       },
-      data: { location: location },
+      //data: { location: location },
     };
 
     try {

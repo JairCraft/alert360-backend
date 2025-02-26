@@ -18,16 +18,17 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use(cors());
+
+app.get("/", (req, res) => {
+  res.send("Y si lo tiene prendalo, el radio");
+});
+
 app.use(authRoutes);
 app.use(verifyToken);
 app.use(deviceRoutes);
 app.use(alertRoutes);
 app.use(contactRoutes);
 app.use(userRoutes);
-
-app.get("/", (req, res) => {
-  res.send("Y si lo tiene prendalo, el radio");
-});
 
 app.listen(PORT, () => {
   console.log("Server is running on http://localhost:" + PORT);
