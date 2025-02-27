@@ -9,16 +9,15 @@ export const getAlerts = async (req, res) => {
   res.json(rows);
 };
 
-export const saveAlert = async (req, res) => {
-  const data = req.body;
+export const saveAlert = async (user_id, description, latitude, longitude) => {
   try {
     const result = await pool.query(
       "INSERT INTO alerts (user_id, description) VALUES ($1, $2) RETURNING id",
-      [data.user_id, data.description]
+      [user_id, description]
     );
     await pool.query(
       "INSERT INTO locations (alert_id, latitude, longitude) VALUES ($1, $2, $3)",
-      [result.rows[0].id, data.latitude, data.longitude]
+      [result.rows[0].id, latitude, longitude]
     );
   } catch (e) {
     return res.status(400).json({ mesasge: e.message });
@@ -55,6 +54,7 @@ export const sendNotifications = async (req, res) => {
     try {
       const response = await admin.messaging().send(message);
       console.log("Successfully sent message:", response);
+      saveAlert(user_id, body, location.latitude, location.longitude);
       res.json({ success: true, response });
     } catch (error) {
       console.error("Error sending message:", error);
