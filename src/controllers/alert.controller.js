@@ -10,19 +10,14 @@ export const getAlerts = async (req, res) => {
 };
 
 export const saveAlert = async (user_id, description, latitude, longitude) => {
-  try {
-    const result = await pool.query(
-      "INSERT INTO alerts (user_id, description) VALUES ($1, $2) RETURNING id",
-      [user_id, description]
-    );
-    await pool.query(
-      "INSERT INTO locations (alert_id, latitude, longitude) VALUES ($1, $2, $3)",
-      [result.rows[0].id, latitude, longitude]
-    );
-  } catch (e) {
-    return res.status(400).json({ mesasge: e.message });
-  }
-  res.sendStatus(201);
+  const result = await pool.query(
+    "INSERT INTO alerts (user_id, description) VALUES ($1, $2) RETURNING id",
+    [user_id, description]
+  );
+  await pool.query(
+    "INSERT INTO locations (alert_id, latitude, longitude) VALUES ($1, $2, $3)",
+    [result.rows[0].id, latitude, longitude]
+  );
 };
 
 const auxreq = createRequire(import.meta.url);
