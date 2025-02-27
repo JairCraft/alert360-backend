@@ -14,10 +14,10 @@ export const saveAlert = async (user_id, description, latitude, longitude) => {
     "INSERT INTO alerts (user_id, description) VALUES ($1, $2) RETURNING id",
     [user_id, description]
   );
-  await pool.query(
+  /* await pool.query(
     "INSERT INTO locations (alert_id, latitude, longitude) VALUES ($1, $2, $3)",
     [result.rows[0].id, latitude, longitude]
-  );
+  ); */
 };
 
 const auxreq = createRequire(import.meta.url);
